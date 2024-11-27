@@ -1,0 +1,295 @@
+    1  grep HugePages_ /proc/meminfo
+    2  dmesg | grep -e DMAR -e IOMMU
+    3  sudo dmesg | grep -e DMAR -e IOMMU
+    4  cat /proc/cmdline | grep iommu=pt
+    5  cat /proc/cmdline | grep intel_iommu=on
+    6  l
+    7  mkdir ovs-dpdk
+    8  cd ovs-dpdk/
+    9  k
+   10  l
+   11  wget https://fast.dpdk.org/rel/dpdk-23.11.2.tar.xz
+   12  tar xf dpdk-23.11.2.tar.xz
+   13  pwd
+   14  export DPDK_DIR=/home/skfwong_google_com/ovs-dpdk/dpdk-stable-23.11.2
+   15  export DPDK_BUILD=$DPDK_DIR/build
+   16  which meson
+   17  meson build
+   18  l
+   19  cd dpdk-stable-23.11.2/
+   20  l
+   21  meson build
+   22  ninja -C build
+   23  pkg-config --modversion libdpdk
+   24  grep NOIOMMU /boot/config-$(uname -r)
+   25  cat /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
+   26  l
+   27  sudo ninja -C build install
+   28  sudo ldconfig
+   29  pkg-config --modversion libdpdk
+   30  cd ../
+   31  l
+   32  git clone https://github.com/openvswitch/ovs.git
+   33  l
+   34  cd ovs/
+   35  l
+   36  ./boot.sh 
+   37  sudo apt-get install autoreconf
+   38  sudo apt-get install autoconf
+   39  ./boot.sh 
+   40  sudo apt-get install libtool
+   41  ./boot.sh 
+   42  ./configure --with-dpdk=yes
+   43  make
+   44  sudo make install
+   45  modprobe vfio-pci
+   46  /usr/bin/chmod a+x /dev/vfio
+   47  sudo /usr/bin/chmod a+x /dev/vfio
+   48  sudo /usr/bin/chmod 0666 /dev/vfio/*
+   49  cd ../dpdk-stable-23.11.2/usertools/
+   50  l
+   51  ifconfig
+   52  sudo apt install net-tools
+   53  ifconfig
+   54  ./dpdk-devbind.py --bind=vfio-pci ens5
+   55  ifconfig ens5 down
+   56  sudo ifconfig ens5 down
+   57  ./dpdk-devbind.py --bind=vfio-pci ens5
+   58  sudo ./dpdk-devbind.py --bind=vfio-pci ens5
+   59  ./dpdk-devbind.py --status
+   60  cd ~/ovs-dpdk/ovs/
+   61  l
+   62  export DB_SOCK=/usr/local/var/run/openvswitch/db.sock
+   63  ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
+   64  mkdir -p /usr/local/etc/openvswitch
+   65  l
+   66  ovsdb-tool create /usr/local/etc/openvswitch/conf.db     vswitchd/vswitch.ovsschema
+   67  sudo ovsdb-tool create /usr/local/etc/openvswitch/conf.db     vswitchd/vswitch.ovsschema
+   68  mkdir -p /usr/local/var/run/openvswitch
+   69  sudo mkdir -p /usr/local/var/run/openvswitch
+   70  ovsdb-server --remote=punix:/usr/local/var/run/openvswitch/db.sock     --remote=db:Open_vSwitch,Open_vSwitch,manager_options     --private-key=db:Open_vSwitch,SSL,private_key     --certificate=db:Open_vSwitch,SSL,certificate     --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert     --pidfile --detach --log-file
+   71  sudo ovsdb-server --remote=punix:/usr/local/var/run/openvswitch/db.sock     --remote=db:Open_vSwitch,Open_vSwitch,manager_options     --private-key=db:Open_vSwitch,SSL,private_key     --certificate=db:Open_vSwitch,SSL,certificate     --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert     --pidfile --detach --log-file
+   72  mkdir -p /usr/local/var/log/openvswitch/
+   73  sudo mkdir -p /usr/local/var/log/openvswitch/
+   74  sudo ovsdb-server --remote=punix:/usr/local/var/run/openvswitch/db.sock     --remote=db:Open_vSwitch,Open_vSwitch,manager_options     --private-key=db:Open_vSwitch,SSL,private_key     --certificate=db:Open_vSwitch,SSL,certificate     --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert     --pidfile --detach --log-file
+   75  ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
+   76  sudo ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
+   77  echo $DB_SOCK
+   78  ovs-ctl --no-ovsdb-server --db-sock="/usr/local/var/run/openvswitch/db.sock" start
+   79  l
+   80  find . -name "ovs-ctl"
+   81  ./utilities/ovs-ctl --no-ovsdb-server --db-sock="/usr/local/var/run/openvswitch/db.sock" start
+   82  sudo ./utilities/ovs-ctl --no-ovsdb-server --db-sock="/usr/local/var/run/openvswitch/db.sock" start
+   83  ovs-vsctl get Open_vSwitch . dpdk_initialized
+   84  sudo ovs-vsctl get Open_vSwitch . dpdk_initialized
+   85  ovs-vswitchd --version
+   86  ovs-vsctl get Open_vSwitch . dpdk_version
+   87  sudo ovs-vsctl get Open_vSwitch . dpdk_version
+   88  microk8s enable dns 
+   89  microk8s enable dashboard
+   90  microk8s enable storage
+   91  microk8s kubectl get all --all-namespaces
+   92  which microk8s
+   93  uname -a
+   94  sudo snap install microk8s --classic
+   95  sudo ufw allow in on cni0 && sudo ufw allow out on cni0
+   96  sudo ufw default allow routed
+   97  microk8s enable dns 
+   98  microk8s enable dashboard
+   99  microk8s enable storage
+  100  sudo usermod -a -G microk8s skfwong_google_com
+  101  sudo chown -R skfwong_google_com ~/.kube
+  102  cd ~/
+  103  ls -a
+  104  mkdir .kube
+  105  cd
+  106  sudo chown -R skfwong_google_com ~/.kube
+  107  microk8s enable dns 
+  108  microk8s enable dashboard
+  109  microk8s enable storage
+  110  newgrp microk8s
+  111  ifconfig
+  112  ovs-vsctl get Open_vSwitch . dpdk_initialized
+  113  sudo ovs-vsctl get Open_vSwitch . dpdk_initialized
+  114  ovs-vswitchd --version
+  115  l
+  116  vi ovs-dpdk/dpdk-stable-23.11.2/usertools/dpdk-devbind.py --status
+  117  ovs-dpdk/dpdk-stable-23.11.2/usertools/dpdk-devbind.py --status
+  118  ip
+  119  ip -a
+  120  ip route
+  121  microk8s kubectl get nodes
+  122  microk8s kubectl label nodes ovs-dpdk-vm1 ovn.kubernetes.io/ovs_dp_type="userspace"
+  123  vi /opt/ovs-config
+  124  sudo vi /opt/ovs-config
+  125  l
+  126  cd ovs-dpdk/
+  127  l
+  128  mkdir kube-ovn
+  129  cd kube-ovn/
+  130  l
+  131  wget https://raw.githubusercontent.com/kubeovn/kube-ovn/release-1.12/dist/images/install.sh
+  132  l
+  133  vi install.sh 
+  134  l
+  135  chmod +x install.sh 
+  136  sudo bash install.sh --with-hybrid-dpdk
+  137  sudo snap alias microk8s.kubectl kubectl
+  138  sudo bash install.sh --with-hybrid-dpdk
+  139  ps -ef | grep ovs
+  140  ps -ef | grep dpdk
+  141  sudo  ovs-vsctl get Open_vSwitch . iface_types
+  142  ovs-vsctl show
+  143  sudo ovs-vsctl show
+  144  pkg-config --modversion libdpdk
+  145  grep HugePages_ /proc/meminfo
+  146  ovs-vsctl get Open_vSwitch . dpdk_initialized
+  147  sudo ovs-vsctl get Open_vSwitch . dpdk_initialized
+  148  docker run -d -p 5000:5000 --name local-registry registry:2
+  149  pwd
+  150  cd ovs-dpdk/userspace-cni/userspace-cni-network-plugin/
+  151  make build
+  152  make copy
+  153  make push
+  154  make deploy
+  155  which docker
+  156  sudo apt-get update
+  157  sudo apt-get install  ca-certificates  curl  gnupg  lsb-release
+  158  sudo mkdir -m 0755 -p /etc/apt/keyrings
+  159  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  160  echo \ 
+  161  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \ 
+  162  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  163  for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+  164  # Add Docker's official GPG key:
+  165  sudo apt-get update
+  166  sudo apt-get install ca-certificates curl
+  167  sudo install -m 0755 -d /etc/apt/keyrings
+  168  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  169  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  170  # Add the repository to Apt sources:
+  171  echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  172    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  173  sudo apt-get update
+  174  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  175  docker run -d -p 5000:5000 --name local-registry registry:2
+  176  sudo groupadd docker
+  177  sudo usermod -aG docker $USER
+  178  newgrp docker
+  179  history
+  180  pkg-config --modversion libdpdk
+  181  microk8s enable multus
+  182  microk8s enable community
+  183  sudo microk8s enable community
+  184  sudo microk8s enable multus
+  185  kubectl get pods -n kube-system --selector=app=multus
+  186  l
+  187  cd ovs-dpdk/
+  188  l
+  189  mkdir userspace-cni
+  190  cd userspace-cni/
+  191  l
+  192  git clone https://github.com/intel/userspace-cni-network-plugin.git
+  193  l
+  194  cd userspace-cni-network-plugin/
+  195  l
+  196  vi Makefile 
+  197  l
+  198  make build
+  199  history | less
+  200  microk8s add-node
+  201  history | grep docker
+  202  for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+  203  # Add Docker's official GPG key:
+  204  sudo apt-get update
+  205  sudo apt-get install ca-certificates curl
+  206  sudo install -m 0755 -d /etc/apt/keyrings
+  207  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  208  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  209  # Add the repository to Apt sources:
+  210  echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  211    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  212  sudo apt-get update
+  213  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  214  microk8s add-node
+  215  kubectl get nodes
+  216  microk8s kubectl get nodes
+  217  cd ~/.kube
+  218  l
+  219  cd cache/
+  220  l
+  221  cd
+  222  microk8s
+  223  microk8s config
+  224  microk8s config > ~/.kube/config
+  225  df -k .
+  226  du -a
+  227  microk8s config > ~/.kube/config
+  228  sudo df -Th
+  229  sudo lsblk
+  230  sudo parted -l /dev/sda
+  231  sudo parted /dev/sda
+  232  sudo partprobe /dev/sda
+  233  sudo resize2fs /dev/sda1
+  234  sudo lsblk
+  235  l
+  236  microk8s config > ~/.kube/config
+  237  kubectl get nodes
+  238  microk8s kubectl get nodes
+  239  vi ~/.kube/config 
+  240  sudo kubectl get nodes
+  241  ls /etc/
+  242  sudo swapoff -a
+  243  microk8s kubectl get nodes
+  244  sudo microk8s.refresh-certs --cert ca.crt
+  245  sudo microk8s.refresh-certs --cert server.crt
+  246  microk8s kubectl get nodes
+  247  kubectl get nodes
+  248  ls /var/lib/cni/
+  249  l
+  250  sudo ls /var/lib/cni/
+  251  sudo ls /opt/cni/bin
+  252  sudo ls -l /opt/cni/bin
+  253  sudo ls -l /var/snap/microk8s/current/opt/cni/bin/
+  254  vi /etc/cni/net.d/00-multus.conf 
+  255  sudo vi /etc/cni/net.d/00-multus.conf 
+  256  sudo mkdir -p /var/lib/cni/usrspcni
+  257  sudo /usr/local/bin/ovs-vsctl show
+  258  history | grep bind
+  259  l
+  260  cd ovs-dpdk/
+  261  l
+  262  cd ../
+  263  ovs-dpdk/dpdk-stable-23.11.2/usertools/dpdk-devbind.py --status
+  264  ovs-vsctl add-port br0 dpdk-p0    -- set Interface dpdk-p0 type=dpdk options:dpdk-devargs=0000:00:05.0
+  265  sudo ovs-vsctl add-port br0 dpdk-p0    -- set Interface dpdk-p0 type=dpdk options:dpdk-devargs=0000:00:05.0
+  266  sudo ovs-vsctl add-br br0 -- set bridge br0 datapath_type=netdev
+  267  sudo ovs-vsctl add-port br0 dpdk-p0    -- set Interface dpdk-p0 type=dpdk options:dpdk-devargs=0000:00:05.0
+  268  cat /usr/local/var/log/openvswitch
+  269  cat /usr/local/var/log/openvswitch/ovs-vswitchd.log 
+  270  sudo cat /usr/local/var/log/openvswitch/ovs-vswitchd.log 
+  271  sudo ovs-vsctl add-port br0 dpdk-p0    -- set Interface dpdk-p0 type=dpdk options:dpdk-devargs=0000:00:05.0 mtu_request=1460
+  272  sudo ovs-vsctl del-port br0 dpdk-p0
+  273  sudo ovs-vsctl add-port br0 dpdk-p0    -- set Interface dpdk-p0 type=dpdk options:dpdk-devargs=0000:00:05.0 mtu_request=1460
+  274  sudo /usr/local/bin/ovs-vsctl show
+  275  l
+  276  cd ovs-dpdk/
+  277  l
+  278  cd build/
+  279  l
+  280  cd ../
+  281  l
+  282  mkdir testpmd-docker
+  283  cd testpmd-docker/
+  284  l
+  285  vi Dockerfile
+  286  docker ls
+  287  docker list
+  288  l
+  289  docker build -t testpmd
+  290  docker ps -a
+  291  docker build .
+  292  ping www.google.com
+  293  history
+  294  cd
+  295  history > steps
